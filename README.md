@@ -34,6 +34,22 @@ into the package that a pull request then brings to `main`.
 | <img src="apps/net.ludei.words/icon.svg" width="24" alt=""> | **Words Document** | 0.1.0 | Ludeku | Documents in Word XP's way: fonts, styles and headings, lists, tables, .docx and .txt files. The pages are Univer's. |
 <!-- /apps -->
 
+## Certified and community apps
+
+This repository is the **certified** catalog: every app here was reviewed before it was
+merged. Apps anyone may publish, checked only by CI, live in
+[ludei-os/community](https://github.com/ludei-os/community); Ludei lists both, marks each
+app with its source, and a community app can never use the id of a certified one.
+A community app is promoted by moving its entry and packages here under the same id.
+
+## Withdrawing an app
+
+[`blocklist.json`](blocklist.json) lists apps withdrawn from Ludei, from either catalog:
+`{ "apps": [ { "id": "...", "versions": ["1.0.0"], "reason": "..." } ] }` (no `versions`
+means every version). Ludei reads it at start and every few hours; a withdrawn app no
+longer opens or starts its service, and Add or Remove Apps shows the reason. Adding an
+entry here is how a malicious or claimed app is taken back from computers that have it.
+
 ## Publishing an app
 
 1. Keep the app's source in its own branch here, named after its id. Build the package

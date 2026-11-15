@@ -64,6 +64,16 @@ for (const dir of readdirSync(join(ROOT, 'apps'), { withFileTypes: true })) {
   if (dir.isDirectory() && !seen.has(dir.name)) problem(`apps/${dir.name} is not in the catalog`);
 }
 
+// The blocklist (apps withdrawn from Ludei, read by agentd's catalog.rs): ids, optional
+// versions, and the reason the person is shown.
+const blocklist = JSON.parse(readFileSync(join(ROOT, 'blocklist.json'), 'utf8'));
+if (!Array.isArray(blocklist.apps)) problem('blocklist.json has no "apps" list');
+for (const b of blocklist.apps ?? []) {
+  if (!ID.test(b.id ?? '')) problem(`blocklist entry ${b.id ?? '(no id)'}: bad id`);
+  if (b.versions !== undefined && (!Array.isArray(b.versions) || !b.versions.every((v) => VERSION.test(v)))) problem(`blocklist entry ${b.id}: bad versions`);
+  if (typeof b.reason !== 'string' || !b.reason.trim()) problem(`blocklist entry ${b.id}: no reason`);
+}
+
 if (problems.length) {
   console.error(problems.map((p) => `- ${p}`).join('\n'));
   process.exit(1);
